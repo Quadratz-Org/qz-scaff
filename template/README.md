@@ -8,11 +8,11 @@
 ## Installation
 
 ```bash
-# Deno
-deno add npm:{{PACKAGE_NAME}}
-
 # Bun
 bun add {{PACKAGE_NAME}}
+
+# Deno
+deno add npm:{{PACKAGE_NAME}}
 
 # pnpm
 pnpm add {{PACKAGE_NAME}}

@@ -1,5 +1,6 @@
 import { cancel, isCancel, text } from "@clack/prompts";
 import { prepareDestination } from "./prepare-destination.ts";
+import { readdir } from "node:fs/promises";
 
 export { checkCancel, handleCancel, isDirEmpty, promptNewPath, validateString };
 
@@ -18,7 +19,7 @@ function validateString(value?: string): string | undefined {
  */
 function handleCancel(): never {
   cancel("Installation cancelled!");
-  Deno.exit(1);
+  process.exit(1);
 }
 
 /**
@@ -39,10 +40,7 @@ function checkCancel(answer: string | symbol): asserts answer is string {
  * @returns True if empty, false otherwise.
  */
 async function isDirEmpty(dest: string): Promise<boolean> {
-  for await (const _ of Deno.readDir(dest)) {
-    return false;
-  }
-  return true;
+  return (await readdir(dest)).length === 0;
 }
 
 /**

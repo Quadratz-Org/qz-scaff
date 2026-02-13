@@ -1,3 +1,5 @@
-import {} from "@std/assert";
+import { test, expect } from "bun:test";
 
-Deno.test("test", () => {});
+test("test", () => {
+  expect();
+});

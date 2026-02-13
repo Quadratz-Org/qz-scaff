@@ -7,9 +7,9 @@ you get started with the development process.
 
 ### Prerequisites
 
-Deno installed on your system. If you haven't installed it yet, please refer to
+Bun installed on your system. If you haven't installed it yet, please refer to
 the
-[installation guide](https://docs.deno.com/runtime/getting_started/installation/).
+[installation guide](https://bun.com/docs/installation).
 
 ### Getting Started
 
@@ -17,16 +17,16 @@ the
 2. Clone your fork:
    `git clone https://github.com/Quadratz-Org/{{PACKAGE_NAME}}.git`
 3. Navigate to the project directory: `cd {{PACKAGE_NAME}}`
-4. Install dependencies: `deno install`
-5. Start development: `deno task dev`
+4. Install dependencies: `bun install`
+5. Start development: `bun run dev`
 
 ## Development Workflow
 
 1. Create a new branch: `git checkout -b feature/your-feature-name`
 2. Make your changes
-3. Fix code style and formatting issues: `deno fmt`
-4. Run check: `deno task check`
-5. Build the project: `deno task build`
+3. Fix formatting issues: `bun run fmt`
+4. Run check: `bun run check`
+5. Build the project: `bun run build`
 6. Commit your changes using the conventions below
 7. Push your branch to your fork
 8. Open a pull request

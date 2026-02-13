@@ -1,8 +1,6 @@
 import type { Response } from "./types.ts";
-import { join } from "node:path";
-import { walk } from "@std/fs/walk";
-import { copy } from "@std/fs/copy";
-import { ensureDir } from "@std/fs/ensure-dir";
+import { join, basename } from "node:path";
+import { mkdir, readdir, cp } from "node:fs/promises";
 import npmPkg from "../template/package.json" with { type: "json" };
 
 export { scaffoldProject };
@@ -18,9 +16,9 @@ async function scaffoldProject(resp: Response): Promise<void> {
   const { destination, name, description, keywords } = resp;
 
   // Ensure directory exists before writing specific files.
-  await ensureDir(destination);
+  await mkdir(destination, { recursive: true });
 
-  const promises: Promise<void>[] = [];
+  const promises: Promise<number>[] = [];
   const repoUrl = `${GITHUB_BASE_URL}${name}`;
 
   // 1. Prepare and write package.json
@@ -35,20 +33,20 @@ async function scaffoldProject(resp: Response): Promise<void> {
   };
 
   promises.push(
-    Deno.writeTextFile(
+    Bun.write(
       join(destination, "package.json"),
       JSON.stringify(finalPkg, null, 2),
     ),
   );
 
   const [contributingTxt, readmeTxt] = await Promise.all([
-    Deno.readTextFile(new URL("../template/CONTRIBUTING.md", import.meta.url)),
-    Deno.readTextFile(new URL("../template/README.md", import.meta.url)),
+    Bun.file(new URL("../template/CONTRIBUTING.md", import.meta.url)).text(),
+    Bun.file(new URL("../template/README.md", import.meta.url)).text(),
   ]);
 
   // 2. Write CONTRIBUTING.md
   promises.push(
-    Deno.writeTextFile(
+    Bun.write(
       join(destination, "CONTRIBUTING.md"),
       contributingTxt.replaceAll("{{PACKAGE_NAME}}", name),
     ),
@@ -56,7 +54,7 @@ async function scaffoldProject(resp: Response): Promise<void> {
 
   // 3. Write README.md
   promises.push(
-    Deno.writeTextFile(
+    Bun.write(
       join(destination, "README.md"),
       readmeTxt
         .replaceAll("{{PACKAGE_NAME}}", name)
@@ -75,13 +73,13 @@ async function scaffoldProject(resp: Response): Promise<void> {
     "README.md",
   ]);
 
-  for await (
-    const entry of walk(templatePath, { maxDepth: 1, includeDirs: false })
-  ) {
-    if (excludedFiles.has(entry.name)) continue;
+  for (const source of await readdir(templatePath)) {
+    const fileName = basename(source);
+
+    if (excludedFiles.has(fileName)) continue;
 
     copyPromises.push(
-      copy(entry.path, join(destination, entry.name), { overwrite: true }),
+      cp(source, join(destination, fileName), { force: true, recursive: true }),
     );
   }
 

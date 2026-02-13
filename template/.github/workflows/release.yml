@@ -25,20 +25,20 @@ jobs:
           node-version: "24"
           registry-url: "https://registry.npmjs.org"
 
-      - name: Setup Deno
-        uses: denoland/setup-deno@v2
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
 
       - name: Install dependencies
-        run: deno install --frozen
+        run: bun install --frozen-lockfile
 
       - name: Build
-        run: deno task build
+        run: bun run build
 
       - name: Check
-        run: deno task check
+        run: bun run check
 
       - name: Generate changelog
-        run: deno -A npm:changelogithub
+        run: bunx changelogithub
         continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -47,4 +47,4 @@ jobs:
         run: npm install -g npm@latest
 
       - name: Publish packages to npm
-        run: deno -A npm:clean-pkg-json && npm publish --access public
+        run: bunx clean-pkg-json && bun pm pack && npm publish ./*.tgz --access public

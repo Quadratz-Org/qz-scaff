@@ -1,9 +1,9 @@
 /**
- * A personal-use Deno CLI for scaffolding projects from templates.
+ * A personal-use Bun CLI for scaffolding projects from templates.
  *
  * @example
  * ```sh
- * deno -A jsr:@qz/qz-scaff
+ * bunx @quadratz/qz-scaff
  * ```
  */
 
@@ -11,10 +11,10 @@ import type { Response } from "./types.ts";
 import { scaffoldProject } from "./scaffold-project.ts";
 import { group, intro, outro, text } from "@clack/prompts";
 import { prepareDestination } from "./prepare-destination.ts";
-import pkg from "../deno.json" with { type: "json" };
+import pkg from "../package.json" with { type: "json" };
 import { handleCancel, validateString } from "./utils.ts";
 
-main();
+await main();
 
 /**
  * Main entry point for the scaffolding CLI.
@@ -22,35 +22,38 @@ main();
 async function main(): Promise<void> {
   intro(`Qz Project Scaffold v${pkg.version}`);
 
-  const response = await group({
-    name: () =>
-      text({
-        message: "Package name:",
-        validate: (value) => {
-          if (!value || value.length === 0) return "Name is required";
-          if (!/^[a-z0-9-]+$/.test(value)) {
-            return "Name can only contain lowercase letters, numbers, and hyphens";
-          }
-          if (value.length > 214) return "Name is too long";
-        },
-      }),
-    description: () =>
-      text({
-        message: "Package description:",
-        validate: validateString,
-      }),
-    keywords: () => text({ message: `Keywords:` }),
-    destination: ({ results: { name } }) => {
-      const path = `./${name}`;
-      return text({
-        message: `Project location:`,
-        placeholder: path,
-        defaultValue: path,
-      });
+  const response = (await group(
+    {
+      name: () =>
+        text({
+          message: "Package name:",
+          validate: (value) => {
+            if (!value || value.length === 0) return "Name is required";
+            if (!/^[a-z0-9-]+$/.test(value)) {
+              return "Name can only contain lowercase letters, numbers, and hyphens";
+            }
+            if (value.length > 214) return "Name is too long";
+          },
+        }),
+      description: () =>
+        text({
+          message: "Package description:",
+          validate: validateString,
+        }),
+      keywords: () => text({ message: `Keywords:` }),
+      destination: ({ results: { name } }) => {
+        const path = `./${name ?? ""}`;
+        return text({
+          message: `Project location:`,
+          placeholder: path,
+          defaultValue: path,
+        });
+      },
     },
-  }, {
-    onCancel: handleCancel,
-  }) as Response;
+    {
+      onCancel: handleCancel,
+    },
+  )) as Response;
 
   // Validate and prepare the destination directory.
   response.destination = await prepareDestination(response.destination);

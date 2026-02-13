@@ -1,7 +1,8 @@
 import { resolve } from "node:path";
-import { checkCancel, isDirEmpty, promptNewPath } from "./utils.ts";
-import { emptyDir } from "@std/fs/empty-dir";
+import { rm } from "node:fs/promises";
 import { select } from "@clack/prompts";
+import { checkCancel, isDirEmpty, promptNewPath } from "./utils.ts";
+import { stat } from "node:fs/promises";
 
 export { prepareDestination };
 
@@ -18,10 +19,10 @@ async function prepareDestination(inputPath: string): Promise<string> {
   const dest = resolve(inputPath);
 
   try {
-    const stat = await Deno.stat(dest);
+    const destStat = await stat(dest);
 
     // Case 1: Path exists and is a file.
-    if (!stat.isDirectory) {
+    if (!destStat.isDirectory()) {
       const answer = await select({
         message: "The destination exists but is not a directory. Action?",
         options: [
@@ -30,7 +31,7 @@ async function prepareDestination(inputPath: string): Promise<string> {
         ],
       });
       checkCancel(answer);
-      return promptNewPath();
+      return await promptNewPath();
     }
 
     // Case 2: Path exists and is a Directory -> Check if empty.
@@ -41,9 +42,8 @@ async function prepareDestination(inputPath: string): Promise<string> {
       message: "The destination directory is not empty. Action?",
       options: [
         {
-          value: "empty-dir",
-          label: "Empty the directory",
-          hint: "Delete contents",
+          value: "remove-dir",
+          label: "Remove the directory",
         },
         { value: "overwrite-dir", label: "Merge/Overwrite existing files" },
         { value: "new-path", label: "Pick a new location" },
@@ -54,19 +54,19 @@ async function prepareDestination(inputPath: string): Promise<string> {
     checkCancel(answer);
 
     switch (answer) {
-      case "empty-dir":
-        await emptyDir(dest);
+      case "remove-dir":
+        await rm(dest, { recursive: true, force: true });
         return dest;
 
       case "overwrite-dir":
         return dest;
 
       default:
-        return promptNewPath();
+        return await promptNewPath();
     }
   } catch (error) {
-    // Case 4: Path does not exist (Deno.stat threw NotFound).
-    if (error instanceof Deno.errors.NotFound) {
+    // Case 4: Path does not exist (stat threw NotFound).
+    if (error instanceof Error && "code" in error && error.code === "ENOENT") {
       return dest; // Directory will be created by ensureDir later.
     }
     throw error; // Unexpected error.
