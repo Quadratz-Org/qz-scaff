@@ -9,7 +9,10 @@
   },
   "tasks": {
     "dev": "deno -A src/mod.ts",
-    "check": "deno fmt --check && deno lint src && deno check src && deno publish --dry-run"
+    "check": "deno fmt --check && deno lint src && deno check src && deno publish --dry-run",
+    "publish": "deno -A npm:bumpp"
   },
-  "unstable": ["raw-imports"]
+  "publish": {
+    "exclude": [".github", ".gitattributes"]
+  }
 }
