@@ -21,7 +21,7 @@ jobs:
         uses: denoland/setup-deno@v2
 
       - name: Generate changelog
-        run: deno -A npm:changelogithub
+        run: deno --no-lock -A npm:changelogithub
         continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
