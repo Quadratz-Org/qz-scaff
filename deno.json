@@ -1,7 +1,7 @@
 {
   "name": "@qz/qz-scaff",
   "license": "MIT",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "exports": "./src/mod.ts",
   "imports": {
     "@clack/prompts": "npm:@clack/prompts@^1.0.0",
@@ -9,8 +9,7 @@
   },
   "tasks": {
     "dev": "deno -A src/mod.ts",
-    "check": "deno fmt --check && deno lint src && deno check src && deno publish --dry-run",
-    "publish": "deno -A npm:bumpp"
+    "check": "deno fmt --check && deno lint src && deno check src && deno publish --dry-run"
   },
   "publish": {
     "exclude": [".github", ".gitattributes"]
