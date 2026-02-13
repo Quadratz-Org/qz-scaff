@@ -4,7 +4,7 @@
   "version": "1.0.1",
   "exports": "./src/mod.ts",
   "imports": {
-    "@clack/prompts": "npm:@clack/prompts@^1.0.0",
+    "@clack/prompts": "npm:@clack/prompts@^1.0.1",
     "@std/fs": "jsr:@std/fs@^1.0.22"
   },
   "tasks": {
