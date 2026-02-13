@@ -41,11 +41,9 @@ async function scaffoldProject(resp: Response): Promise<void> {
     ),
   );
 
-  const templateDir = join(import.meta.dirname!, "..", "template");
-
   const [contributingTxt, readmeTxt] = await Promise.all([
-    Deno.readTextFile(join(templateDir, "CONTRIBUTING.md")),
-    Deno.readTextFile(join(templateDir, "README.md")),
+    Deno.readTextFile(new URL("../template/CONTRIBUTING.md", import.meta.url)),
+    Deno.readTextFile(new URL("../template/README.md", import.meta.url)),
   ]);
 
   // 2. Write CONTRIBUTING.md
@@ -69,7 +67,7 @@ async function scaffoldProject(resp: Response): Promise<void> {
   await Promise.all(promises);
 
   // 4. Copy remaining template files
-  const templatePath = join(import.meta.dirname!, "..", "template");
+  const templatePath = new URL("../template", import.meta.url);
   const copyPromises: Promise<void>[] = [];
   const excludedFiles = new Set([
     "CONTRIBUTING.md",
