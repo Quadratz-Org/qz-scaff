@@ -1,0 +1,36 @@
+{
+  "name": "my-package",
+  "type": "module",
+  "version": "1.0.0-alpha.1",
+  "description": "",
+  "author": "Quadratz",
+  "keywords": [""],
+  "license": "MIT",
+  "homepage": "https://github.com/Quadratz-Org/my-package#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Quadratz-Org/my-package.git"
+  },
+  "bugs": "https://github.com/Quadratz-Org/my-package/issues",
+  "exports": {
+    ".": "./dist/index.mjs",
+    "./package.json": "./package.json"
+  },
+  "types": "./dist/index.d.mts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "test": "deno test -R=test/fixtures,test/snapshots",
+    "check": "deno fmt --check && deno lint && deno check && deno task test",
+    "release": "bumpp --commit --push --tag"
+  },
+  "devDependencies": {
+    "@types/node": "^25.2.3",
+    "bumpp": "^10.4.1",
+    "tsdown": "^0.20.3",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+  }
+}
