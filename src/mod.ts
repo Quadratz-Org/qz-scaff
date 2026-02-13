@@ -1,3 +1,12 @@
+/**
+ * A personal-use Deno CLI for scaffolding projects from templates.
+ *
+ * @example
+ * ```sh
+ * deno -A jsr:@qz/qz-scaff
+ * ```
+ */
+
 import type { Response } from "./types.ts";
 import { scaffoldProject } from "./scaffold-project.ts";
 import { group, intro, outro, text } from "@clack/prompts";
