@@ -20,7 +20,7 @@ main();
  * Main entry point for the scaffolding CLI.
  */
 async function main(): Promise<void> {
-  intro(`${pkg.name} v${pkg.version}`);
+  intro(`Qz Project Scaffold v${pkg.version}`);
 
   const response = await group({
     name: () =>
