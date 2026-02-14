@@ -1,5 +1,5 @@
 import type { Response } from "./types.ts";
-import { join, basename } from "node:path";
+import { join } from "node:path";
 import { mkdir, readdir, cp } from "node:fs/promises";
 import npmPkg from "../template/package.json" with { type: "json" };
 
@@ -19,6 +19,7 @@ async function scaffoldProject(resp: Response): Promise<void> {
   await mkdir(destination, { recursive: true });
 
   const promises: Promise<number>[] = [];
+  const templatePath = join(import.meta.dirname, "../template");
   const repoUrl = `${GITHUB_BASE_URL}${name}`;
 
   // 1. Prepare and write package.json
@@ -40,8 +41,8 @@ async function scaffoldProject(resp: Response): Promise<void> {
   );
 
   const [contributingTxt, readmeTxt] = await Promise.all([
-    Bun.file(new URL("../template/CONTRIBUTING.md", import.meta.url)).text(),
-    Bun.file(new URL("../template/README.md", import.meta.url)).text(),
+    Bun.file(join(templatePath, "CONTRIBUTING.md")).text(),
+    Bun.file(join(templatePath, "README.md")).text(),
   ]);
 
   // 2. Write CONTRIBUTING.md
@@ -65,7 +66,6 @@ async function scaffoldProject(resp: Response): Promise<void> {
   await Promise.all(promises);
 
   // 4. Copy remaining template files
-  const templatePath = new URL("../template", import.meta.url);
   const copyPromises: Promise<void>[] = [];
   const excludedFiles = new Set([
     "CONTRIBUTING.md",
@@ -74,12 +74,13 @@ async function scaffoldProject(resp: Response): Promise<void> {
   ]);
 
   for (const source of await readdir(templatePath)) {
-    const fileName = basename(source);
-
-    if (excludedFiles.has(fileName)) continue;
+    if (excludedFiles.has(source)) continue;
 
     copyPromises.push(
-      cp(source, join(destination, fileName), { force: true, recursive: true }),
+      cp(join(templatePath, source), join(destination, source), {
+        force: true,
+        recursive: true,
+      }),
     );
   }
 
