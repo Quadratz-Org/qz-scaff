@@ -12,7 +12,7 @@
   },
   "bugs": "https://github.com/Quadratz-Org/qz-scaff/issues",
   "exports": {
-    ".": "./dist/mod.ts",
+    ".": "./src/index.ts",
     "./package.json": "./package.json"
   },
   "files": [
