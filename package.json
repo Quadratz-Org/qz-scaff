@@ -31,6 +31,7 @@
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "prettier": "3.8.1",
+    "typescript": "^5.9.3",
     "typescript-eslint": "^8.55.0"
   },
   "dependencies": {
@@ -38,8 +39,5 @@
   },
   "module": "index.ts",
   "private": false,
-  "peerDependencies": {
-    "typescript": "^5.9.3"
-  },
   "prettier": {}
 }

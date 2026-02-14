@@ -6,18 +6,16 @@
       "name": "@quadratz/qz-scaff",
       "dependencies": {
         "@clack/prompts": "^1.0.1",
-        "@eslint/js": "^9.39.2",
-        "eslint": "^9.39.2",
-        "typescript-eslint": "^8.55.0",
       },
       "devDependencies": {
+        "@eslint/js": "^9.39.2",
         "@types/bun": "latest",
         "bumpp": "^10.4.1",
+        "eslint": "^9.39.2",
         "eslint-config-prettier": "^10.1.8",
         "prettier": "3.8.1",
-      },
-      "peerDependencies": {
         "typescript": "^5.9.3",
+        "typescript-eslint": "^8.55.0",
       },
     },
   },
