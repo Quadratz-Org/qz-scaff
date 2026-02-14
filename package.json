@@ -37,7 +37,6 @@
   "dependencies": {
     "@clack/prompts": "^1.0.1"
   },
-  "module": "index.ts",
   "private": false,
   "prettier": {}
 }
