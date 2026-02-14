@@ -1,6 +1,6 @@
 {
   "name": "@quadratz/qz-scaff",
-  "version": "2.0.1-beta.2",
+  "version": "2.0.1-beta.3",
   "type": "module",
   "description": "A personal-use Bun CLI for scaffolding projects from templates.",
   "author": "Quadratz",
