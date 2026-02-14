@@ -44,4 +44,26 @@ jobs:
         run: npm install -g npm@latest
 
       - name: Publish packages to npm
-        run: bunx clean-pkg-json && bun pm pack && npm publish ./*.tgz --access public
+        run: |
+          bunx clean-pkg-json
+          bun pm pack
+
+          # Determine if this is a prerelease tag (e.g., v1.0.0-beta.1)
+          TAG_NAME=${GITHUB_REF#refs/tags/}
+
+          # Define the base publish command
+          PUBLISH_CMD="npm publish ./*.tgz --access public"
+
+          # If tag contains a hyphen, it's a prerelease (e.g., -alpha, -beta)
+          if [[ $TAG_NAME == *-* ]]; then
+            # Extract the word after the hyphen (e.g., 'alpha') to use as the npm tag
+            # If no word is found, it defaults to 'next'
+            PRERELEASE_TYPE=$(echo $TAG_NAME | sed -E 's/v?[0-9]+\.[0-9]+\.[0-9]+-?([a-zA-Z]+)?.*/\1/')
+            DIST_TAG=${PRERELEASE_TYPE:-next}
+            
+            echo "Prerelease detected ($TAG_NAME). Publishing with --tag $DIST_TAG"
+            $PUBLISH_CMD --tag $DIST_TAG
+          else
+            echo "Stable release detected ($TAG_NAME). Publishing as latest."
+            $PUBLISH_CMD
+          fi
