@@ -11,9 +11,8 @@
     "url": "git+https://github.com/Quadratz-Org/qz-scaff.git"
   },
   "bugs": "https://github.com/Quadratz-Org/qz-scaff/issues",
-  "exports": {
-    ".": "./src/index.ts",
-    "./package.json": "./package.json"
+  "bin": {
+    "qz-scaff": "src/index.ts"
   },
   "files": [
     "src",
