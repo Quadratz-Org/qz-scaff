@@ -5,13 +5,12 @@ import prettierConfig from "eslint-config-prettier";
 import { defineConfig, globalIgnores } from "eslint/config";
 
 export default defineConfig(
-  globalIgnores(["./template/**"]),
+  globalIgnores(["dist/**", "build/**"]),
   eslint.configs.recommended,
   tseslint.configs.strictTypeChecked,
   tseslint.configs.stylisticTypeChecked,
   prettierConfig,
   {
-    ignores: ["dist/**"],
     languageOptions: {
       parserOptions: {
         projectService: true,
