@@ -7,7 +7,7 @@
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
-    "types": ["node"],
+    // "types": ["node", "bun"],
     "noUnusedLocals": true,
     "declaration": true,
     "isolatedDeclarations": true,
@@ -19,8 +19,7 @@
     "strict": true,
     "skipLibCheck": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true
   },
-  "include": ["src"]
+  "exclude": ["build"]
 }
