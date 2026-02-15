@@ -11,6 +11,7 @@ export default defineConfig(
   tseslint.configs.stylisticTypeChecked,
   prettierConfig,
   {
+    ignores: ["dist/**"],
     languageOptions: {
       parserOptions: {
         projectService: true,

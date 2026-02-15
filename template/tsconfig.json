@@ -21,5 +21,5 @@
     "noFallthroughCasesInSwitch": true,
     "noImplicitOverride": true
   },
-  "exclude": ["build"]
+  "exclude": ["dist"]
 }
